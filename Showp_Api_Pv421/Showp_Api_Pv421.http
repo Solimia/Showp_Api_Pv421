@@ -1,0 +1,6 @@
+@Showp_Api_Pv421_HostAddress = http://localhost:5245
+
+GET {{Showp_Api_Pv421_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
