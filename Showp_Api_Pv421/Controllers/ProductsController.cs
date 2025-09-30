@@ -14,15 +14,27 @@ namespace Showp_Api_Pv421.Controllers
         {
             this.ctx = ctx;
         }
+
+        [HttpGet("all")]
         public IActionResult GetAll()
         {
            var items = ctx.Products.ToList();
 
               return Ok(items);
         }
+        [HttpGet]
         public IActionResult Get(int id)
         {
+            if (id <= 0)
+            {
+                return BadRequest("Id must be greater than zero");
+            }
             var item = ctx.Products.Find(id);
+
+            if (item == null)
+            {
+                return NotFound($"Item with id {id} not found");
+            }
 
             return Ok(item);
         }
