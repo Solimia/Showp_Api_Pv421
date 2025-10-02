@@ -1,4 +1,5 @@
 ﻿using DataAccess.Data;
+using DataAccess.Data.Entities;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,15 +34,43 @@ namespace Showp_Api_Pv421.Controllers
 
             if (item == null)
             {
-                return NotFound($"Item with id {id} not found");
+                return NotFound($"Item with id  not found");
             }
 
             return Ok(item);
         }
-        //public IActionResult Create()
-        //{
+        [HttpPost]
+        public IActionResult Create([FromBody]Product model)
+        {  
 
-        //}
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GetErrorMessages());
+            }
+
+            ctx.Products.Add(model);
+            ctx.SaveChanges();
+
+
+            return CreatedAtAction(nameof(Get),
+                new { id = model.Id },
+                model
+                );
+        }
+
+        [HttpPut]
+        public IActionResult Edit(Product model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GetErrorMessages());
+            }
+
+            ctx.Products.Update(model);
+            ctx.SaveChanges();
+
+            return Ok();
+        }
 
         //public IActionResult Edit()
         //{
@@ -51,5 +80,11 @@ namespace Showp_Api_Pv421.Controllers
         //{
 
         //}
+
+        private IEnumerable<string> GetErrorMessages()
+        {
+            return ModelState.Values.SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage);
+        }
     }
 }
