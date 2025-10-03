@@ -4,6 +4,8 @@ using DataAccess.Data.Entities;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using AutoMapper;
 
 namespace Showp_Api_Pv421.Controllers
 {
@@ -12,9 +14,12 @@ namespace Showp_Api_Pv421.Controllers
     public class ProductsController : ControllerBase
     { 
         private readonly ShopDbContext ctx;
-        public ProductsController(ShopDbContext ctx)
+        private readonly IMapper mapper;
+
+        public ProductsController(ShopDbContext ctx, IMapper mapper)
         {
             this.ctx = ctx;
+            this.mapper = mapper;
         }
 
         [HttpGet("all")]
@@ -49,36 +54,40 @@ namespace Showp_Api_Pv421.Controllers
                 return BadRequest(GetErrorMessages());
             }
 
-            var entity = new Product()
-            {
-                Title = model.Title,
-                ImageUrl = model.ImageUrl,
-                Price = model.Price,
-                Discount = model.Discount,
-                Quantity = model.Quantity,
-                Description = model.Description,
-                CategoryId = model.CategoryId
-            };
+            //var entity = new Product()
+            //{
+            //    Title = model.Title,
+            //    ImageUrl = model.ImageUrl,
+            //    Price = model.Price,
+            //    Discount = model.Discount,
+            //    Quantity = model.Quantity,
+            //    Description = model.Description,
+            //    CategoryId = model.CategoryId
+            //};
+
+            var entity = mapper.Map<Product>(model);
 
             ctx.Products.Add(entity);
             ctx.SaveChanges();
 
-            var resultDto = new ProductDto()
-            {
-                Id = entity.Id,
-                Title = entity.Title,
-                ImageUrl = entity.ImageUrl,
-                Price = entity.Price,
-                Discount = entity.Discount,
-                Quantity = entity.Quantity,
-                Description = entity.Description,
-                CategoryId = entity.CategoryId
-            };
+            //var resultDto = new ProductDto()
+            //{
+            //    Id = entity.Id,
+            //    Title = entity.Title,
+            //    ImageUrl = entity.ImageUrl,
+            //    Price = entity.Price,
+            //    Discount = entity.Discount,
+            //    Quantity = entity.Quantity,
+            //    Description = entity.Description,
+            //    CategoryId = entity.CategoryId
+            //};
+
+            var result = mapper.Map<ProductDto>(entity);
   
 
             return CreatedAtAction(nameof(Get),
-                new { id = resultDto.Id },
-                resultDto
+                new { id = result.Id },
+                result
                 );
         }
 

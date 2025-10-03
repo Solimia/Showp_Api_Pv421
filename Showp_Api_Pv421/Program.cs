@@ -1,5 +1,7 @@
 using DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using BusinessLogic.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,7 @@ string connStr = builder.Configuration.GetConnectionString("ConnStr")
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddAutoMapper(cfg => { }, typeof(MapperProfile));
 
 builder.Services.AddDbContext<ShopDbContext>(options =>
         options.UseSqlServer(connStr));

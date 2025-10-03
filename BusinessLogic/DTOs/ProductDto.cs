@@ -1,4 +1,8 @@
-﻿namespace BusinessLogic.DTOs
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore.Metadata;
+using System.Globalization;
+
+namespace BusinessLogic.DTOs
 {
     public class ProductDto
     {
@@ -19,6 +23,7 @@
         //public Category Category { get; set; }
         //public CategoryDto CategoryDto { get; set; }
         public string  CategoryName { get; set; }
+
 
         // ----- navigation properties
     }
