@@ -1,8 +1,9 @@
-﻿﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using DataAccess.Data.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Shop_mvc_pv421.Data.Entities;
 
-namespace Shop_mvc_pv421.Data
+
+namespace DataAccess.Data
 {
     public class ShopDbContext : IdentityDbContext
     {
