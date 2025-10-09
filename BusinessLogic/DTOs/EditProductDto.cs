@@ -1,16 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Globalization;
-using AutoMapper;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace BusinessLogic.DTOs
 {
-    public class ProductDto
+    public class EditProductDto
     {
         public int Id { get; set; }
 
         [Required, MinLength(3, ErrorMessage = "Title must has least 3 charactes")]
         [RegularExpression(@"^[A-Z].*", ErrorMessage = "Title must start with a capital letter")]
+
         public string Title { get; set; }
         public string? ImageUrl { get; set; }
 
@@ -21,16 +19,10 @@ namespace BusinessLogic.DTOs
         public int Discount { get; set; }
         public int Quantity { get; set; }
 
-        [MinLength(10), MaxLength(5000)]
+        [MinLength(10), MaxLength(3000)]
 
         public string? Description { get; set; }
         public int CategoryId { get; set; }
-
-
-        //public Category Category { get; set; }
-        //public CategoryDto CategoryDto { get; set; }
-        public string  CategoryName { get; set; }
-
 
         // ----- navigation properties
     }

@@ -1,11 +1,12 @@
-﻿using BusinessLogic.DTOs;
+﻿using AutoMapper;
+using BusinessLogic.DTOs;
 using DataAccess.Data;
 using DataAccess.Data.Entities;
+using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace Showp_Api_Pv421.Controllers
@@ -47,7 +48,7 @@ namespace Showp_Api_Pv421.Controllers
                 return NotFound($"Item with id  not found");
             }
 
-            return Ok(item);
+            return Ok(mapper.Map<ProductDto>(item));
         }
         [HttpPost]
         public IActionResult Create(CreateProductDto model)
@@ -58,16 +59,6 @@ namespace Showp_Api_Pv421.Controllers
                 return BadRequest(GetErrorMessages());
             }
 
-            //var entity = new Product()
-            //{
-            //    Title = model.Title,
-            //    ImageUrl = model.ImageUrl,
-            //    Price = model.Price,
-            //    Discount = model.Discount,
-            //    Quantity = model.Quantity,
-            //    Description = model.Description,
-            //    CategoryId = model.CategoryId
-            //};
 
             var entity = mapper.Map<Product>(model);
 
@@ -92,7 +83,7 @@ namespace Showp_Api_Pv421.Controllers
                 return BadRequest(GetErrorMessages());
             }
 
-            ctx.Products.Update(model);
+            ctx.Products.Update(mapper.Map<Product>(model));
             ctx.SaveChanges();
 
             return Ok();
@@ -102,10 +93,27 @@ namespace Showp_Api_Pv421.Controllers
         //{
 
         //}
-        //public IActionResult Delete(int, id)
-        //{
 
-        //}
+
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            if (id < 0)
+            {
+                return BadRequest("Id must be greater than zero");
+            }
+            var item = ctx.Products.Find(id);
+
+            if (item == null)
+            {
+                return NotFound("Product not found");
+            }
+
+            ctx.Products.Remove(item);
+            ctx.SaveChanges(true);
+
+            return NoContent();
+        }
 
         private IEnumerable<string> GetErrorMessages()
         {
