@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace Showp_Api_Pv421.Controllers
 {
@@ -20,14 +21,17 @@ namespace Showp_Api_Pv421.Controllers
         {
             this.ctx = ctx;
             this.mapper = mapper;
+            
         }
 
         [HttpGet("all")]
         public IActionResult GetAll()
         {
-           var items = ctx.Products.ToList();
+           var items = ctx.Products
+                .Include(x => x.Category) 
+                .ToList();
 
-              return Ok(items);
+            return Ok(mapper.Map<IEnumerable<ProductDto>>(items));
         }
         [HttpGet]
         public IActionResult Get(int id)
@@ -70,22 +74,11 @@ namespace Showp_Api_Pv421.Controllers
             ctx.Products.Add(entity);
             ctx.SaveChanges();
 
-            //var resultDto = new ProductDto()
-            //{
-            //    Id = entity.Id,
-            //    Title = entity.Title,
-            //    ImageUrl = entity.ImageUrl,
-            //    Price = entity.Price,
-            //    Discount = entity.Discount,
-            //    Quantity = entity.Quantity,
-            //    Description = entity.Description,
-            //    CategoryId = entity.CategoryId
-            //};
-
             var result = mapper.Map<ProductDto>(entity);
   
 
-            return CreatedAtAction(nameof(Get),
+            return CreatedAtAction(
+                nameof(Get),
                 new { id = result.Id },
                 result
                 );
