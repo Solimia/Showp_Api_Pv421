@@ -51,7 +51,7 @@ namespace Showp_Api_Pv421.Controllers
             return Ok(mapper.Map<ProductDto>(item));
         }
         [HttpPost]
-        public IActionResult Create(CreateProductDto model)
+        public IActionResult Create([FromBody]CreateProductDto model)
         {  
 
             if (!ModelState.IsValid)

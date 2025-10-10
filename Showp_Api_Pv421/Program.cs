@@ -2,6 +2,9 @@ using DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using BusinessLogic.Configurations;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +21,11 @@ builder.Services.AddDbContext<ShopDbContext>(options =>
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
+
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 
 
 var app = builder.Build();
