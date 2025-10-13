@@ -37,7 +37,7 @@ namespace Showp_Api_Pv421.Controllers
         [HttpGet]
         public IActionResult Get(int id)
         {
-            if (id <= 0)
+            if (id < 0)
             {
                 return BadRequest("Id must be greater than zero");
             }
@@ -53,12 +53,6 @@ namespace Showp_Api_Pv421.Controllers
         [HttpPost]
         public IActionResult Create([FromBody]CreateProductDto model)
         {  
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(GetErrorMessages());
-            }
-
 
             var entity = mapper.Map<Product>(model);
 

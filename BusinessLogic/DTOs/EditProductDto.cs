@@ -6,8 +6,8 @@ namespace BusinessLogic.DTOs
     {
         public int Id { get; set; }
 
-        [Required, MinLength(3, ErrorMessage = "Title must has least 3 charactes")]
-        [RegularExpression(@"^[A-Z].*", ErrorMessage = "Title must start with a capital letter")]
+        //[Required, MinLength(3, ErrorMessage = "Title must has least 3 charactes")]
+        //[RegularExpression(@"^[A-Z].*", ErrorMessage = "Title must start with a capital letter")]
 
         public string Title { get; set; }
         public string? ImageUrl { get; set; }

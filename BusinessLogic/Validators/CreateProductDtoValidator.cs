@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.Validators
 {
-    internal class CreateProductDtoValidator : AbstractValidator<CreateProductDto>
+    public class CreateProductDtoValidator : AbstractValidator<CreateProductDto>
     {
         public CreateProductDtoValidator()
-        {
+         {
             RuleFor(x => x.Title)
                 .NotEmpty()
                 .MinimumLength(3)
@@ -31,15 +31,8 @@ namespace BusinessLogic.Validators
 
             RuleFor(x => x.Description)
                     .MinimumLength(10)
-                    .MaximumLength(3000)
-                    .Must(IsStartWithThe);
+                    .MaximumLength(3000);                  
 
-
-        }
-
-        private bool IsStartWithThe(string str)
-        {
-            return str.StartsWith("The ");
         }
     }    
 }
