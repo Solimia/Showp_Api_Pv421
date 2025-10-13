@@ -4,6 +4,8 @@ using AutoMapper;
 using BusinessLogic.Configurations;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using BusinessLogic.Interfaces;
+using BusinessLogic.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +29,8 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddScoped<IProductsService, ProductsService>();
+ 
 
 var app = builder.Build();
 

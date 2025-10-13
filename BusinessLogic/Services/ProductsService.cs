@@ -59,6 +59,11 @@ namespace BusinessLogic.Services
             ctx.SaveChanges();
         }
 
+        public void Edit(Product model)
+        {
+            throw new NotImplementedException();
+        }
+
         public ProductDto? Get(int id)
         {
 

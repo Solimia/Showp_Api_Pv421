@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessLogic.DTOs;
+using BusinessLogic.Interfaces;
 using DataAccess.Data;
 using DataAccess.Data.Entities;
 using DocumentFormat.OpenXml.InkML;
@@ -14,53 +15,39 @@ namespace Showp_Api_Pv421.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
-    { 
-        private readonly ShopDbContext ctx;
-        private readonly IMapper mapper;
+    {
+        private IProductsService productsService;
 
-        public ProductsController(ShopDbContext ctx, IMapper mapper)
+        public ProductsController(IProductsService productsService)
         {
-            this.ctx = ctx;
-            this.mapper = mapper;
-            
+            this.productsService = productsService;
+
         }
 
         [HttpGet("all")]
         public IActionResult GetAll()
         {
-           var items = ctx.Products
-                .Include(x => x.Category) 
-                .ToList();
 
-            return Ok(mapper.Map<IEnumerable<ProductDto>>(items));
+
+            return Ok(productsService.GetAll());
         }
         [HttpGet]
         public IActionResult Get(int id)
-        {
-            if (id < 0)
-            {
-                return BadRequest("Id must be greater than zero");
-            }
-            var item = ctx.Products.Find(id);
-
-            if (item == null)
-            {
-                return NotFound($"Item with id  not found");
-            }
-
-            return Ok(mapper.Map<ProductDto>(item));
+        { 
+            return Ok(productsService.Get(id));
         }
+
         [HttpPost]
         public IActionResult Create([FromBody]CreateProductDto model)
-        {  
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GetErrorMessages());
+            }
 
-            var entity = mapper.Map<Product>(model);
 
-            ctx.Products.Add(entity);
-            ctx.SaveChanges();
+            var result = productsService.Create(model);
 
-            var result = mapper.Map<ProductDto>(entity);
-  
 
             return CreatedAtAction(
                 nameof(Get),
@@ -77,8 +64,7 @@ namespace Showp_Api_Pv421.Controllers
                 return BadRequest(GetErrorMessages());
             }
 
-            ctx.Products.Update(mapper.Map<Product>(model));
-            ctx.SaveChanges();
+            productsService.Edit(model);
 
             return Ok();
         }
@@ -92,19 +78,8 @@ namespace Showp_Api_Pv421.Controllers
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            if (id < 0)
-            {
-                return BadRequest("Id must be greater than zero");
-            }
-            var item = ctx.Products.Find(id);
 
-            if (item == null)
-            {
-                return NotFound("Product not found");
-            }
-
-            ctx.Products.Remove(item);
-            ctx.SaveChanges(true);
+            productsService.Delete(id);
 
             return NoContent();
         }
