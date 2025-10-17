@@ -7,9 +7,7 @@ namespace DataAccess.Data
 {
     public class ShopDbContext : IdentityDbContext
     {
-        public ShopDbContext() {
-            /*Database.EnsureCreated();*/
-        }
+        public ShopDbContext() {}
         public ShopDbContext(DbContextOptions<ShopDbContext> options) : base(options) { }
 
         public DbSet<Product> Products { get; set; }
