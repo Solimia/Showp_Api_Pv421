@@ -15,8 +15,9 @@ namespace Showp_Api_Pv421.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
+
     {
-        private IProductsService productsService;
+        private readonly IProductsService productsService;
 
         public ProductsController(IProductsService productsService)
         {
@@ -38,7 +39,7 @@ namespace Showp_Api_Pv421.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody]CreateProductDto model)
+        public IActionResult Create([FromBody] CreateProductDto model)
         {
             if (!ModelState.IsValid)
             {
@@ -57,7 +58,7 @@ namespace Showp_Api_Pv421.Controllers
         }
 
         [HttpPut]
-        public IActionResult Edit(Product model)
+        public IActionResult Edit(EditProductDto model)
         {
             if (!ModelState.IsValid)
             {
@@ -68,11 +69,6 @@ namespace Showp_Api_Pv421.Controllers
 
             return Ok();
         }
-
-        //public IActionResult Edit()
-        //{
-
-        //}
 
 
         [HttpDelete]

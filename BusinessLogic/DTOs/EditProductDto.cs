@@ -15,15 +15,13 @@ namespace BusinessLogic.DTOs
         public decimal Price { get; set; }
 
         [Range(0, 100)]
-
         public int Discount { get; set; }
         public int Quantity { get; set; }
 
-        [MinLength(10), MaxLength(3000)]
 
+        [MinLength(10), MaxLength(3000)]
         public string? Description { get; set; }
         public int CategoryId { get; set; }
 
-        // ----- navigation properties
     }
 }
