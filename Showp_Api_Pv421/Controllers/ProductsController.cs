@@ -74,8 +74,8 @@ namespace Showp_Api_Pv421.Controllers
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-
-            productsService.Delete(id);
+        
+            productsService.Delete(id);  
 
             return NoContent();
         }
