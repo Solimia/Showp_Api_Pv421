@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Data;
 using System.Net;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BusinessLogic.Services
 {
@@ -78,11 +79,21 @@ namespace BusinessLogic.Services
             return mapper.Map<ProductDto>(item);
         }
 
-        public IList<ProductDto> GetAll()
+        public IList<ProductDto> GetAll(int? filterCategoryId, string? searchTitle)
         {
-                var items = ctx.Products
-                .Include(x => x.Category)
-                .ToList();
+            IQueryable<Product> query = ctx.Products
+                .Include(x => x.Category);
+                
+
+            if (filterCategoryId != null)
+             query = query.Where(x => x.CategoryId == filterCategoryId);
+
+            if (searchTitle != null)
+                query = query.Where(x => x.Title.ToLower().Contains(searchTitle.ToLower()));
+
+            // quwery.OrderBy(x => x.Price);
+
+            var items = query.ToList();
 
             return mapper.Map<IList<ProductDto>>(items);
         }

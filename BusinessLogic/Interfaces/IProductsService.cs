@@ -5,7 +5,7 @@ namespace BusinessLogic.Interfaces
 {
     public interface IProductsService
     {
-        IList<ProductDto> GetAll();
+        IList<ProductDto> GetAll(int? filterCategoryId, string? searchTitle);
 
         ProductDto? Get(int id);
 
