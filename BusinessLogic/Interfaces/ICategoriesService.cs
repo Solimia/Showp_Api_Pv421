@@ -2,7 +2,7 @@
 {
     public interface ICategoriesService
     {
-        Task<IList<CategoryDto>> Get();
+        Task<IList<CategoryDto>> Get(int pageIndex);
 
         Task<CategoryDto> GetById(int id);
 

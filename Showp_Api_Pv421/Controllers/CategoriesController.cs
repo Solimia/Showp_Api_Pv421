@@ -24,9 +24,9 @@ namespace Showp_Api_Pv421.Controllers
 
         // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories(int pageIndex = 0)
+        public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories(int pageNumber = 1)
         {
-            return await categoriesService.Get(pageIndex);
+            return Ok (await categoriesService.Get(pageNumber));
         }
 
         // GET: api/Categories/5
@@ -39,7 +39,7 @@ namespace Showp_Api_Pv421.Controllers
         // PUT: api/Categories/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategory(int id, Category category)
+        public async Task<IActionResult> PutCategory(CategoryDto category)
         {
             await categoriesService.Edit(category);
 
@@ -49,33 +49,19 @@ namespace Showp_Api_Pv421.Controllers
         // POST: api/Categories
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Category>> PostCategory(Category category)
+        public async Task<ActionResult<Category>> PostCategory(CategoryDto category)
         {
-            _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
+            var item  = await categoriesService.Create(category);
 
-            return CreatedAtAction("GetCategory", new { id = category.Id }, category);
+            return CreatedAtAction("GetCategory", new { id = item.Id }, item);
         }
 
         // DELETE: api/Categories/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-
+            await categoriesService.Delete(id);
             return NoContent();
-        }
-
-        private bool CategoryExists(int id)
-        {
-            return _context.Categories.Any(e => e.Id == id);
         }
     }
 }

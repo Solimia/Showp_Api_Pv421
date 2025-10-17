@@ -37,7 +37,7 @@ namespace BusinessLogic.Services
         {
             if (id < 0)
             {
-                throw new HttpException("Id can not negative", HttpStatusCode.BadRequest); 
+                throw new HttpException("Id can not negative", HttpStatusCode.BadRequest);
             }
             var item = ctx.Products.Find(id);
 
@@ -83,10 +83,10 @@ namespace BusinessLogic.Services
         {
             IQueryable<Product> query = ctx.Products
                 .Include(x => x.Category);
-                
+
 
             if (filterCategoryId != null)
-             query = query.Where(x => x.CategoryId == filterCategoryId);
+                query = query.Where(x => x.CategoryId == filterCategoryId);
 
             if (searchTitle != null)
                 query = query.Where(x => x.Title.ToLower().Contains(searchTitle.ToLower()));

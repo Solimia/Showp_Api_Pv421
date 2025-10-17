@@ -7,17 +7,23 @@ namespace DataAccess.Data
 {
     public class ShopDbContext : IdentityDbContext
     {
+        private DbSet<Order> orders;
+
         public ShopDbContext() {}
         public ShopDbContext(DbContextOptions<ShopDbContext> options) : base(options) { }
 
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; } = default!;
+        public DbSet<Category> Categories { get; set; } = default!;
 
-     /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=ShopPv421;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
-        }*/
+        //public DbSet<Order> Orders { get => orders; set => orders = value;
+
+        public DbSet<OrderDetails> OrderDetails { get; set; } = default!;
+
+        /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+           {
+               base.OnConfiguring(optionsBuilder);
+               optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=ShopPv421;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+           }*/
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +43,7 @@ namespace DataAccess.Data
             });
 
             modelBuilder.Entity<Product>().HasData(new List<Product>()
+
             {
                 new Product() { Id = 1, Title = "iPhone X", CategoryId = 1, Discount = 10, Price = 650, Quantity = 5, ImageUrl = "https://applecity.com.ua/image/cache/catalog/0iphone/ipohnex/iphone-x-black-1000x1000.png" },
                 new Product () { Id = 2, Title = "PowerBall", CategoryId = 2, Price = 45.5M, Quantity = 3, ImageUrl = "https://http2.mlstatic.com/D_NQ_NP_727192-CBT53879999753_022023-V.jpg" },
@@ -47,5 +54,9 @@ namespace DataAccess.Data
                 new Product() { Id = 7, Title = "Samsung S4", CategoryId = 2, Discount = 0, Price = 440, Quantity = 0 },
             });
         }
+    }
+
+    public class OrderDetails
+    {
     }
 }

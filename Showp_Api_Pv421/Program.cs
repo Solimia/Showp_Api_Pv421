@@ -31,6 +31,7 @@ builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<IProductsService, ProductsService>();
+builder.Services.AddScoped<ICategoriesService, CategoriesService>();
  
 
 var app = builder.Build();
