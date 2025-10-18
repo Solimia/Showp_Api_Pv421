@@ -19,4 +19,5 @@ public class Product
 
     // ----- navigation properties
     public Category? Category { get; set; }
+    public ICollection<OrderDetails> Orders { get; set; } = new List<OrderDetails>();
 }
