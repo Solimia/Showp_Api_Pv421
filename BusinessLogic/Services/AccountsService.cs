@@ -1,6 +1,9 @@
-﻿using BusinessLogic.DTOs.Accounts;
+﻿using AutoMapper;
+using BusinessLogic.DTOs.Accounts;
 using BusinessLogic.Interfaces;
 using DataAccess.Data;
+using DataAccess.Data.Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +14,15 @@ namespace BusinessLogic.Services
 {
     public class AccountsService : IAccountsService
     {
-        private readonly ShopDbContext ctx;
+        private readonly UserManager<User> userManager;
+        private readonly IMapper mapper;
 
-        public AccountsService(ShopDbContext ctx)
+        //private readonly ShopDbContext ctx;
+
+        public AccountsService(UserManager<User> userManager, IMapper mapper)
         {
-            this.ctx = ctx;
+            this.userManager = userManager;
+            this.mapper = mapper;
         }
 
         public Task Login(LoginModel model)
@@ -30,8 +37,10 @@ namespace BusinessLogic.Services
 
         public Task Register(RegisterModel model)
         {
-            throw new NotImplementedException();
-            //ctx.Users.Add
+            var user = mapper.Map<User>(model);
+
+            userManager.CreateAsync(model, model.Password);
+
         }
 
     }
