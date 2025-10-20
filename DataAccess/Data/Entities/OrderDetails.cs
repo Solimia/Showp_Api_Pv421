@@ -1,6 +1,6 @@
 ﻿namespace DataAccess.Data.Entities
 {
-    public class OrderDetails
+    public class OrderDetails : BaseEntity
     {
         public int Id { get; set; }
 

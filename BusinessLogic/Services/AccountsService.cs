@@ -16,7 +16,7 @@ namespace BusinessLogic.Services
         private readonly SignInManager<User> signInManager;
         private readonly IMapper mapper;
 
-        //private readonly ShopDbContext ctx;
+        private readonly ShopDbContext ctx;
 
         public AccountsService(
             IJwtService jwtService,
@@ -88,7 +88,7 @@ namespace BusinessLogic.Services
 
             await ctx.SaveChangesAsysnc();
 
-            return new();
+            return new LoginResponse()
             {
                 AccessToken = newJwt,
 

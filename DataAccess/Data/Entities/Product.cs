@@ -1,6 +1,6 @@
 ﻿namespace DataAccess.Data.Entities;
 
-public class Product
+public class Product : BaseEntity
 {
     public int Id { get; set; }
 
