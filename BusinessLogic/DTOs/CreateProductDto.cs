@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using DataAccess.Data.Entities;
 
 namespace BusinessLogic.DTOs
 {

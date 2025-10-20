@@ -4,10 +4,8 @@ using BusinessLogic.Interfaces;
 using DataAccess.Data;
 using DataAccess.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Data;
 using System.Net;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BusinessLogic.Services
 {

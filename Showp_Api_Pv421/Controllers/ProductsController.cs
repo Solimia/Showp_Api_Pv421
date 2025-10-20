@@ -1,15 +1,7 @@
-﻿using AutoMapper;
-using BusinessLogic.DTOs;
+﻿using BusinessLogic.DTOs;
 using BusinessLogic.Interfaces;
-using DataAccess.Data;
-using DataAccess.Data.Entities;
-using DocumentFormat.OpenXml.InkML;
-using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.EntityFrameworkCore;
 
 namespace Showp_Api_Pv421.Controllers
 {
@@ -73,7 +65,7 @@ namespace Showp_Api_Pv421.Controllers
             return Ok();
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         public IActionResult Delete(int id)
         {

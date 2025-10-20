@@ -1,8 +1,6 @@
 ﻿using DataAccess.Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using System.Diagnostics;
 
 
 namespace DataAccess.Data

@@ -1,4 +1,3 @@
-using AutoMapper;
 using BusinessLogic.Configurations;
 using BusinessLogic.DTOs;
 using BusinessLogic.Interfaces;
@@ -7,12 +6,11 @@ using DataAccess.Data;
 using DataAccess.Data.Entities;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Showp_Api_Pv421;
-using System.Text;
+using Showp_Api_Pv421.Extensions;
+using Showp_Api_PV421;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -47,27 +45,19 @@ builder.Services.AddScoped<IProductsService, ProductsService>();
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 
+
 builder.Services.AddSingleton(_ => builder.Configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>()!);
+var jwtOpts = builder.Configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>()!; 
 
-var jwtOpts = builder.Configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>()!;
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = false,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtOpts.Issuer,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOpts.Key)),
-            ClockSkew = TimeSpan.Zero
-        };
-    });
+builder.Services.AddJwtSettings(jwtOpts);
+builder.Services.AddSwaggerWithJWT();
 
 
 var app = builder.Build();
+
+app.SeedRolesAndInitialAdmin();
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

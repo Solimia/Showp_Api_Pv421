@@ -1,7 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Globalization;
-using AutoMapper;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace BusinessLogic.DTOs
 {

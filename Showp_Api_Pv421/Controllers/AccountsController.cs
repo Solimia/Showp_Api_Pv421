@@ -1,7 +1,6 @@
 ﻿using BusinessLogic.DTOs.Accounts;
 using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Showp_Api_Pv421.Controllers

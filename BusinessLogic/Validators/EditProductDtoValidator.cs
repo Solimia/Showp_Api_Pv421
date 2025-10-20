@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BusinessLogic.DTOs;
+﻿using BusinessLogic.DTOs;
 using FluentValidation;
 
 public class EditProductDtoValidator : AbstractValidator<EditProductDto>
