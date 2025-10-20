@@ -21,6 +21,8 @@ namespace DataAccess.Data
         public DbSet<Order> Orders { get; set; } = default!;
         public DbSet<OrderDetails> OrderDetails { get; set; } = default!;
 
+        public DbSet<RefreshToken> RefreshTokens { get; set; } = default!;
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

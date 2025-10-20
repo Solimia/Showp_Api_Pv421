@@ -13,6 +13,9 @@ namespace Showp_Api_Pv421.Controllers
 
     {
         private readonly IAccountsService accountsService;
+
+        private string? CurrentIp => HttpContext.Connection.RemoteIpAddress?.ToString() ;
+
         public AccountsController(IAccountsService accountsService)
         {
             this.accountsService = accountsService;
@@ -29,7 +32,7 @@ namespace Showp_Api_Pv421.Controllers
 
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            var res = await accountsService.Login(model);
+            var res = await accountsService.Login(model, CurrentIp);
             return Ok(res);
         }
         [HttpGet("logout")]
@@ -38,6 +41,15 @@ namespace Showp_Api_Pv421.Controllers
         {
             await accountsService.Logout(model);
             return Ok();
+        }
+
+
+        [HttpGet("refresh")]
+
+        public async Task<IActionResult> Refresh(RefreshRequest model)
+        {
+           
+            return Ok(await accountsService.Refresh(model, CurrentIp));
         }
     }
 

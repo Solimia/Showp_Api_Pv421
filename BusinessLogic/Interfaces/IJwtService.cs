@@ -10,7 +10,7 @@ namespace BusinessLogic.Interfaces
         string GenerateToken(IEnumerable<Claim> claims);
 
         // ------- Refresh Token
-        RefreshToken GenerateRefreshToken(string ipAddress);
+        string GenerateRefreshToken(string ipAddress);
         //IEnumerable<Claim> GetClaimsFromExpiredToken(string token);
         //DateTime GetLastValidRefreshTokenDate();
     }

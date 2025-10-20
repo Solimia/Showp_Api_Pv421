@@ -7,9 +7,12 @@ using DataAccess.Data;
 using DataAccess.Data.Entities;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Showp_Api_Pv421;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -48,18 +51,36 @@ builder.Services.AddSingleton(_ => builder.Configuration.GetSection(nameof(JwtOp
 
 var jwtOpts = builder.Configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>()!;
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtOpts.Issuer,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOpts.Key)),
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
+{;
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    app.UseMiddleware<ErrorHandlerMiddleware>();
+}
+if (app.Environment.IsProduction()) {
+    app.UseMiddleware<ErrorHandlerMiddleware>();
 }
 
-app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 

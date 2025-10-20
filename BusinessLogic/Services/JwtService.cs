@@ -60,7 +60,7 @@ namespace BusinessLogic.Services
             {
                 new(ClaimTypes.NameIdentifier, user.Id),
                 new(ClaimTypes.Email, user.Email ?? string.Empty),
-                new(ClaimTypes.DateOfBirth, user.Birthdate?.ToString() ?? string.Empty)
+                new(ClaimTypes.DateOfBirth,user.Birthdate?.ToString() ?? string.Empty)
             };
 
             var roles = userManager.GetRolesAsync(user).Result;
