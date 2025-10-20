@@ -13,7 +13,7 @@ using Showp_Api_Pv421;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string connStr = builder.Configuration.GetConnectionString("ConnStr")
+string connStr = builder.Configuration.GetConnectionString("RemoteDb")
         ?? throw new Exception("No Connection String found.");
 // Add services to the container.
 
@@ -38,6 +38,7 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddScoped<IAccountsService, AccountsService>();
 builder.Services.AddScoped<IProductsService, ProductsService>();
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
  

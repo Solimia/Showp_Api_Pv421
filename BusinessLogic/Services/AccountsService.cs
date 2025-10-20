@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,31 +16,45 @@ namespace BusinessLogic.Services
     public class AccountsService : IAccountsService
     {
         private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
         private readonly IMapper mapper;
 
         //private readonly ShopDbContext ctx;
 
-        public AccountsService(UserManager<User> userManager, IMapper mapper)
+        public AccountsService(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper)
         {
+            this.signInManager = signInManager;
             this.userManager = userManager;
             this.mapper = mapper;
         }
 
-        public Task Login(LoginModel model)
+        public async Task Login(LoginModel model)
         {
-            throw new NotImplementedException();
+            var user = await userManager.FindByEmailAsync(model.Email);
+
+            if (user == null || !await userManager.CheckPasswordAsync(user, model.Password))
+            {
+                throw new HttpException("Invalid email or password", HttpStatusCode.BadRequest);
+            }
+
+            await signInManager.SignInAsync(user, true);
         }
 
-        public Task Logout(LogoutModel model)
+        public async Task Logout(LogoutModel model)
         {
-            throw new NotImplementedException();
+            await signInManager.SignOutAsync();
         }
 
-        public Task Register(RegisterModel model)
+        public async Task Register(RegisterModel model)
         {
-            var user = mapper.Map<User>(model);
+           var user = mapper.Map<User>(model);
 
-            userManager.CreateAsync(model, model.Password);
+           var result = await userManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
+            {
+                throw new HttpException(result.Errors.FirstOrDefault()?.Description ?? "Error", HttpStatusCode.BadRequest);
+            }
 
         }
 

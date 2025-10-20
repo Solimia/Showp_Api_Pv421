@@ -20,7 +20,7 @@ namespace BusinessLogic.Configurations
             CreateMap<ProductDto, Product>().ReverseMap();
 
             CreateMap<RegisterModel, User>()
-                .ForMember(x => x.UserName, opt => opt.MapFrom(s => s.Email))
+                .ForMember(x => x.UserName, opt => opt.MapFrom(model => model.Email))
                 .ForMember(x => x.PasswordHash, opt => opt.Ignore());
         }
     }

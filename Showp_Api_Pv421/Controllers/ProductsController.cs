@@ -5,6 +5,7 @@ using DataAccess.Data;
 using DataAccess.Data.Entities;
 using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -33,6 +34,8 @@ namespace Showp_Api_Pv421.Controllers
             return Ok(productsService.GetAll(filterCategoryId, searchTitle));
         }
         [HttpGet]
+
+        [Authorize]
         public IActionResult Get(int id)
         { 
             return Ok(productsService.Get(id));
