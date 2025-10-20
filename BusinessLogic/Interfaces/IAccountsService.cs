@@ -6,7 +6,7 @@ namespace BusinessLogic.Interfaces
     {
         Task Register(RegisterModel model );
 
-        Task Login(LoginModel model );
+        Task<LoginResponse> Login(LoginModel model );
 
         Task Logout(LogoutModel model);
 

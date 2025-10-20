@@ -27,10 +27,10 @@ namespace Showp_Api_Pv421.Controllers
         }
         [HttpGet("Login")]
 
-        public async Task<IActionResult> Login(LoginModel model)
+        public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            await accountsService.Login(model);
-            return Ok();
+            var res = await accountsService.Login(model);
+            return Ok(res);
         }
         [HttpGet("logout")]
 

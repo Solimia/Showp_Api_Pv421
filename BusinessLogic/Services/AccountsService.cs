@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using BusinessLogic.DTOs.Accounts;
 using BusinessLogic.Interfaces;
 using DataAccess.Data;
@@ -15,20 +16,25 @@ namespace BusinessLogic.Services
 {
     public class AccountsService : IAccountsService
     {
+        private readonly IJwtService jwtService;
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
         private readonly IMapper mapper;
 
         //private readonly ShopDbContext ctx;
 
-        public AccountsService(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper)
+        public AccountsService(
+            IJwtService jwtService,
+            UserManager<User> userManager, 
+            SignInManager<User> signInManager, 
+            IMapper mapper)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.mapper = mapper;
         }
 
-        public async Task Login(LoginModel model)
+        public async Task<LoginResponse> Login(LoginModel model)
         {
             var user = await userManager.FindByEmailAsync(model.Email);
 
@@ -37,9 +43,14 @@ namespace BusinessLogic.Services
                 throw new HttpException("Invalid email or password", HttpStatusCode.BadRequest);
             }
 
-            await signInManager.SignInAsync(user, true);
-        }
+            //await signInManager.SignInAsync(user, true);
 
+            return new()
+            {
+                AccessToken = jwtService.GenerateToken(jwtService.GetClaims())
+            };
+
+        }
         public async Task Logout(LogoutModel model)
         {
             await signInManager.SignOutAsync();
