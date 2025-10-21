@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BusinessLogic.Interfaces;
 using DataAccess.Data.Entities;
-using BusinessLogic.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Showp_Api_PV421.Helpers;
 
 namespace Showp_Api_Pv421.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriesController : ControllerBase
@@ -18,42 +18,37 @@ namespace Showp_Api_Pv421.Controllers
             this.categoriesService = categoriesService;
         }
 
-        // GET: api/Categories
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories(int pageNumber = 1)
         {
-            return Ok (await categoriesService.Get(pageNumber));
+            return Ok(await categoriesService.Get(pageNumber));
         }
 
-        // GET: api/Categories/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CategoryDto>> GetCategory(int id)
         {
-            return await categoriesService.GetById(id);
+            return Ok(await categoriesService.GetById(id));
         }
 
-        // PUT: api/Categories/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PutCategory(CategoryDto category)
         {
             await categoriesService.Edit(category);
-
             return NoContent();
         }
 
-        // POST: api/Categories
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<Category>> PostCategory(CategoryDto category)
         {
-            var item  = await categoriesService.Create(category);
-
+            var item = await categoriesService.Create(category);
             return CreatedAtAction("GetCategory", new { id = item.Id }, item);
         }
-
-        // DELETE: api/Categories/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.ADMIN, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             await categoriesService.Delete(id);

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessLogic.Interfaces;
 using DataAccess.Data.Entities;
+using DataAccess.Repositories;
 using System.Net;
 
 namespace BusinessLogic.Services

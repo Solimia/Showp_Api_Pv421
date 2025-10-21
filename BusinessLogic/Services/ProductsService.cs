@@ -80,7 +80,7 @@ namespace BusinessLogic.Services
         public IList<ProductDto> GetAll(int? filterCategoryId, string? searchTitle)
         {
             IQueryable<Product> query = ctx.Products
-                .Include(x => x.Category);
+                .Include("Category");
 
 
             if (filterCategoryId != null)

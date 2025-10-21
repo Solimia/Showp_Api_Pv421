@@ -12,7 +12,7 @@ namespace Shop_mvc_pv421.Migrations
 {
     [DbContext(typeof(ShopDbContext))]
     [Migration("20250911215636_initial")]
-    partial class initial
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
