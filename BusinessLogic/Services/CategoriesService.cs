@@ -57,12 +57,12 @@ namespace BusinessLogic.Services
         private async Task<Category> GetEntityById(int id)
         {
             if (id < 0)
-                throw new HttpException("Id can not be negative.", HttpStatusCode.BadRequest); // 400
+                throw new HttpException("Id can not be negative.", HttpStatusCode.BadRequest); 
 
             var item = await repo.GetByIdAsync(id);
 
             if (item == null)
-                throw new HttpException($"Category with id:{id} not found.", HttpStatusCode.NotFound); // 404
+                throw new HttpException($"Category with id:{id} not found.", HttpStatusCode.NotFound);
 
             return item;
         }

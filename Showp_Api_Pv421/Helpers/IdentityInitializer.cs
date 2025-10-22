@@ -13,7 +13,7 @@ namespace Showp_Api_PV421.Helpers
     {
         public static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
         {
-            //var roleManager = app.GetRequiredService<RoleManager<IdentityRole>>();
+
 
             if (!await roleManager.RoleExistsAsync(Roles.ADMIN))
                 await roleManager.CreateAsync(new(Roles.ADMIN));
@@ -24,7 +24,6 @@ namespace Showp_Api_PV421.Helpers
 
         public static async Task SeedAdminAsync(UserManager<User> userManager)
         {
-            //var userManager = app.GetRequiredService<UserManager<User>>();
 
             const string USERNAME = "admin@ukr.net";
             const string PASSWORD = "Qwer-1234";

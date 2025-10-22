@@ -31,7 +31,6 @@ namespace DataAccess.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            // Additional configuration can go here
             modelBuilder.SeedCategories();
             modelBuilder.SeedProducts();
 

@@ -3,6 +3,8 @@ using BusinessLogic.DTOs;
 using BusinessLogic.Interfaces;
 using DataAccess.Data;
 using DataAccess.Data.Entities;
+using DataAccess.Repositories;
+using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Net;
@@ -11,90 +13,70 @@ namespace BusinessLogic.Services
 {
     public class ProductsService : IProductsService
     {
-        private readonly ShopDbContext ctx;
+        private readonly IRepository<Product> repo;
         private readonly IMapper mapper;
 
-        public ProductsService(ShopDbContext ctx, IMapper mapper)
+        public ProductsService(IRepository<Product> repo, IMapper mapper)
         {
-            this.ctx = ctx;
+            this.repo = repo;
             this.mapper = mapper;
         }
-        public ProductDto Create(CreateProductDto model)
+
+        public async Task<ProductDto> Create(CreateProductDto model)
         {
             var entity = mapper.Map<Product>(model);
 
-            ctx.Products.Add(entity);
-            ctx.SaveChanges();
+            await repo.AddAsync(entity);
 
             return mapper.Map<ProductDto>(entity);
-
-
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
             if (id < 0)
-            {
-                throw new HttpException("Id can not negative", HttpStatusCode.BadRequest);
-            }
-            var item = ctx.Products.Find(id);
+                throw new HttpException("Id can not be negative.", HttpStatusCode.BadRequest); 
+
+            var item = await repo.GetByIdAsync(id);
 
             if (item == null)
-            {
-                throw new HttpException($"Product with id {id} not found", HttpStatusCode.NotFound);
-            }
+                throw new HttpException($"Product with id:{id} not found.", HttpStatusCode.NotFound); 
 
-            ctx.Products.Remove(item);
-            ctx.SaveChanges(true);
-
+            await repo.DeleteAsync(item);
         }
 
-        public void Edit(EditProductDto model)
+        public async Task Edit(EditProductDto model)
         {
-            ctx.Products.Update(mapper.Map<Product>(model));
-            ctx.SaveChanges();
+
+            await repo.UpdateAsync(mapper.Map<Product>(model));
         }
 
-        public void Edit(Product model)
+        public async Task<ProductDto?> Get(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        public ProductDto? Get(int id)
-        {
-
             if (id < 0)
-            {
-                return null;
-            }
-            var item = ctx.Products.Find(id);
+                return null; 
+
+            var item = await repo.GetByIdAsync(id);
 
             if (item == null)
-            {
                 return null;
-            }
 
             return mapper.Map<ProductDto>(item);
         }
 
-        public IList<ProductDto> GetAll(int? filterCategoryId, string? searchTitle)
+        public async Task<IList<ProductDto>> GetAll(int? filterCategoryId, string? searchTitle) 
         {
-            IQueryable<Product> query = ctx.Products
-                .Include("Category");
 
+            var filterEx = PredicateBuilder.New<Product>(true);
 
             if (filterCategoryId != null)
-                query = query.Where(x => x.CategoryId == filterCategoryId);
+                filterEx = filterEx.And(x => x.CategoryId == filterCategoryId);
 
-            if (searchTitle != null)
-                query = query.Where(x => x.Title.ToLower().Contains(searchTitle.ToLower()));
+            if (!string.IsNullOrWhiteSpace(searchTitle))
+                filterEx = filterEx.And(x => x.Title.ToLower().Contains(searchTitle.ToLower()));
 
-            // quwery.OrderBy(x => x.Price);
-
-            var items = query.ToList();
+            var items = await repo.GetAllAsync(filtering: filterEx, includes: nameof(Product.Category));
 
             return mapper.Map<IList<ProductDto>>(items);
         }
-
     }
 }

@@ -15,7 +15,6 @@ public class Product : BaseEntity
     public string? Description { get; set; }
     public int CategoryId { get; set; }
 
-    // ----- navigation properties
     public Category? Category { get; set; }
     public ICollection<OrderDetails> Orders { get; set; } = new List<OrderDetails>();
 }
